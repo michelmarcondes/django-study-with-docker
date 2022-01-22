@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  app:   #name of my app
+    build: 
+      context: .  #directory
+    ports:
+      - "8081:8081"
+    volumes: # maped to local drive and content are updated in real time
+      - ./app:/app # map local directory to docker image directory
+    command: sh -c "python manage.py runserver 0.0.0.0:8081"

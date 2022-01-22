@@ -1,0 +1,20 @@
+#build docker image
+
+#build docker compose
+sudo docker-compose build
+
+
+# create djago project via docker compose
+sudo docker-compose run app django-admin startproject app .
+
+## verbose command
+sudo docker-compose run app sh -c "django-admin startproject app ."
+
+# run docker compose
+sudo docker-compose up
+
+# create apps docker integrated
+## docker-compose run <app name> <command>
+
+# create core app in docker image
+sudo docker-compose run app python manage.py startapp core

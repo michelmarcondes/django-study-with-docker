@@ -18,3 +18,17 @@ sudo docker-compose up
 
 # create core app in docker image
 sudo docker-compose run app python manage.py startapp core
+
+
+#Run Django administration migrations
+sudo docker-compose run app python manage.py migrate
+
+#Create superuser on Django administration
+sudo docker-compose run app python manage.py createsuperuser
+
+### migrations
+#create migrations
+sudo docker-compose run app python manage.py makemigrations
+
+#execute migrations
+sudo docker-compose run app python manage.py migrate

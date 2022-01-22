@@ -10,7 +10,7 @@ sudo docker-compose run app django-admin startproject app .
 ## verbose command
 sudo docker-compose run app sh -c "django-admin startproject app ."
 
-# run docker compose
+# run docker compose (run server)
 sudo docker-compose up
 
 # create apps docker integrated

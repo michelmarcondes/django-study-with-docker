@@ -2,5 +2,15 @@
 {% block content %}
 
 <h1>Projects Template</h1>
+<p>{{ message }}</p>
+
+<ul>
+    {% for project in projects %}
+        <li>
+            <div><a href="{% url 'single-project' project.id %}">{{ project.title }}</a></div>
+            <div>{{ project.description }}</div>
+        </li>
+    {% endfor %}
+</ul>
 
 {% endblock content %}

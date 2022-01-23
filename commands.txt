@@ -1,4 +1,5 @@
 #build docker image
+sudo docker build .
 
 #build docker compose
 sudo docker-compose build
@@ -42,3 +43,8 @@ sudo docker-compose run app python manage.py shell
 #### projects = Project.objects.all()
 #### print(projects)
 
+### Generate static files to production environment
+sudo docker-compose run app python manage.py collectstatic
+
+### Install middleware to handle with static files in production
+sudo docker-compose run app python -m pip install whitenoise

@@ -32,3 +32,13 @@ sudo docker-compose run app python manage.py makemigrations
 
 #execute migrations
 sudo docker-compose run app python manage.py migrate
+
+
+### Interacting with database using python shell
+sudo docker-compose run app python manage.py shell
+
+#### Example
+#### from projects.models import Project
+#### projects = Project.objects.all()
+#### print(projects)
+

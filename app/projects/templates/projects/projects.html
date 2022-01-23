@@ -2,15 +2,25 @@
 {% block content %}
 
 <h1>Projects Template</h1>
-<p>{{ message }}</p>
 
-<ul>
+<table>
+    <tr>
+        <th></th>
+        <th>ID</th>
+        <th>Project</th>
+        <th>Positive Votes Ratio</th>
+        <th>Votes</th>
+    </tr>
     {% for project in projects %}
-        <li>
-            <div><a href="{% url 'single-project' project.id %}">{{ project.title }}</a></div>
-            <div>{{ project.description }}</div>
-        </li>
+    <tr>
+        <td><a href="{% url 'single-project' project.id %}">View</a></td>
+        <td>{{project.id}}</td>
+        <td>{{project.title}}</td>
+        <td>{{project.vote_ratio}}</td>
+        <td>{{project.vote_total}}</td>
+    </tr>
     {% endfor %}
-</ul>
+    
+</table>
 
 {% endblock content %}

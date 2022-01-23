@@ -1,28 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from .models import Project
-
-projectList = [
-    {
-        'id':'1',
-        'title': 'Ecommerce Website',
-        'description': 'Fully functional ecommerce website'
-    },
-    {
-        'id':'2',
-        'title': 'Portfolio Website',
-        'description': 'This was a project where I built out my portfolio'
-    },
-    {
-        'id':'3',
-        'title': 'Social Network',
-        'description': 'Awesome open source project I am still working on'
-    },
-]
+from .forms import ProjectForm
 
 # Create your views here.
-
 def projects(request):
     projects = Project.objects.all()
     context = {'projects': projects}
@@ -33,3 +15,45 @@ def project(request, pk):
     projectObj = Project.objects.get(id=pk)
     
     return render(request, 'projects/single-project.html', {'project': projectObj})
+
+
+def createProject(request):
+    projectForm = ProjectForm()
+
+    #getting and validating sent data
+    if request.method == 'POST':
+        projectForm = ProjectForm(request.POST)
+        if projectForm.is_valid():
+            projectForm.save()
+            return redirect('projects')
+
+
+    context = {'form': projectForm}
+    return render(request, 'projects/project_form.html', context)
+
+
+def updateProject(request, pk):
+    project = Project.objects.get(id=pk)
+    projectForm = ProjectForm(instance=project)
+
+    #getting and validating sent data
+    if request.method == 'POST':
+        projectForm = ProjectForm(request.POST, instance=project)
+        if projectForm.is_valid():
+            projectForm.save()
+            return redirect('projects')
+
+
+    context = {'form': projectForm}
+    return render(request, 'projects/project_form.html', context) 
+
+
+def deleteProject(request, pk):
+    project = Project.objects.get(id=pk)
+
+    if request.method == 'POST':
+        project.delete()
+        return redirect('projects')
+
+    context = {'object': project}
+    return render(request, 'projects/delete_template.html', context)

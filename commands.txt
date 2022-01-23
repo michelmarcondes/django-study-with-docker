@@ -16,8 +16,8 @@ sudo docker-compose up
 # create apps docker integrated
 ## docker-compose run <app name> <command>
 
-# create core app in docker image
-sudo docker-compose run app python manage.py startapp core
+# create an app in docker image
+sudo docker-compose run app python manage.py startapp <app name>
 
 
 #Run Django administration migrations

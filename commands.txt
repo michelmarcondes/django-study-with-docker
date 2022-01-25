@@ -48,3 +48,6 @@ sudo docker-compose run app python manage.py collectstatic
 
 ### Install middleware to handle with static files in production
 sudo docker-compose run app python -m pip install whitenoise
+
+### Install environment control to use .env
+sudo docker-compose run app pip install django-environ

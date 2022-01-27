@@ -48,7 +48,7 @@
                 </h3>
                 <p>
                   <a class="project__author" href="{% url 'single-project' project.id %}"
-                    >By Dennis Ivanov</a
+                    >By {{project.owner.name}}</a
                   >
                 </p>
                 <p class="project--rating">

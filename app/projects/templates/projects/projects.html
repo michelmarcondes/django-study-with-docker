@@ -47,7 +47,7 @@
                     {{project.title}}
                 </h3>
                 <p>
-                  <a class="project__author" href="{% url 'single-project' project.id %}"
+                  <a class="project__author" href="{% url 'user-profile' project.owner.id %}"
                     >By {{project.owner.name}}</a
                   >
                 </p>

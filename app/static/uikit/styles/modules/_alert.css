@@ -37,6 +37,7 @@
   outline: transparent;
   font-size: 2rem;
   transition: var(--generic-transition);
+  z-index: 1001;
 }
 
 .alert > .alert__close:hover {

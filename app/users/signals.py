@@ -1,4 +1,5 @@
 #SIGNALS
+import profile
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
@@ -20,6 +21,19 @@ def createProfile(sender, instance, created, **kwargs):
             email = user.email,
             name = user.first_name,
         )
+
+#update user credentials when a profile was updated
+@receiver(post_save, sender=Profile)
+def updateUser(sender, instance, created, **kwargs):
+    profile = instance
+    user = profile.user
+    if created == False: #check if user doesnt exist
+        user.first_name = profile.name
+        user.username = profile.username
+        user.email = profile.email
+        user.save()
+    
+
 
 #When a profile is deleted, user also is deleted
 #to avoid orphans data

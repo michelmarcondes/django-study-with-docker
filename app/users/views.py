@@ -1,11 +1,12 @@
 from zlib import decompressobj
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from django.contrib.auth.models import User
 from .models import Profile
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, ProfileForm
 
 # Create your views here.
 
@@ -51,7 +52,7 @@ def registerUser(request):
             messages.success(request, ' User account was created!')
 
             login(request, user)
-            return redirect('profiles')
+            return redirect('edit-account')
         else:
             messages.warning(request, 'Something goes wrong... Try again or contact us.')
 
@@ -69,5 +70,31 @@ def userProfile(request, pk):
 
     topSkills = profile.skill_set.exclude(description__exact="") #exclude skills with empty descriptions
     otherSkills = profile.skill_set.filter(description="") #just skills with empty descriptions
+
     context = {'profile': profile, 'topSkills': topSkills, 'otherSkills': otherSkills}
     return render(request, 'users/user-profile.html', context)
+
+@login_required(login_url='login')
+def userAccount(request):
+    profile = request.user.profile #grab one to one relationship
+    skills = profile.skill_set.all()
+    projects = profile.project_set.all()
+
+    context = {'profile': profile, 'skills': skills, 'projects': projects }
+    return render(request, 'users/account.html', context)
+
+@login_required(login_url='login')
+def editAccount(request):
+    profile = request.user.profile
+    form = ProfileForm(instance=profile) #fill form with profile data
+
+    #to save submitted data and file
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+
+        if form.is_valid():
+            form.save()
+            return redirect('account')
+
+    context = {'form': form}
+    return render(request, 'users/profile_form.html', context)

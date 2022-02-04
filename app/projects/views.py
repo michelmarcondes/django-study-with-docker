@@ -19,14 +19,17 @@ def project(request, pk):
 
 @login_required(login_url='login')
 def createProject(request):
+    profile = request.user.profile
     projectForm = ProjectForm()
 
     #getting and validating sent data
     if request.method == 'POST':
         projectForm = ProjectForm(request.POST, request.FILES)
         if projectForm.is_valid():
-            projectForm.save()
-            return redirect('projects')
+            project = projectForm.save(commit=False)
+            project.owner = profile #set logged user as project owner
+            project.save()
+            return redirect('account')
 
 
     context = {'form': projectForm}
@@ -34,7 +37,9 @@ def createProject(request):
 
 @login_required(login_url='login')
 def updateProject(request, pk):
-    project = Project.objects.get(id=pk)
+    profile = request.user.profile
+    # project = Project.objects.get(id=pk)
+    project = profile.project_set.get(id=pk) #ensure just owner can update his project
     projectForm = ProjectForm(instance=project)
 
     #getting and validating sent data
@@ -42,7 +47,7 @@ def updateProject(request, pk):
         projectForm = ProjectForm(request.POST, request.FILES, instance=project)
         if projectForm.is_valid():
             projectForm.save()
-            return redirect('projects')
+            return redirect('account')
 
 
     context = {'form': projectForm}
@@ -50,11 +55,12 @@ def updateProject(request, pk):
 
 @login_required(login_url='login')
 def deleteProject(request, pk):
-    project = Project.objects.get(id=pk)
+    profile = request.user.profile
+    project = profile.project_set.get(id=pk) # ensure just owner can delete his project
 
     if request.method == 'POST':
         project.delete()
         return redirect('projects')
 
     context = {'object': project}
-    return render(request, 'projects/delete_template.html', context)
+    return render(request, 'delete_template.html', context)

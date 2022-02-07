@@ -71,8 +71,9 @@
         {% endfor %}
       </div>
     </div>
-    
   </section>
+
+ {% include 'pagination.html' with queryset=projects %}
 </main>
 
 {% endblock content %}

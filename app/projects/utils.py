@@ -52,3 +52,21 @@ def searchProjects(request):
     )
 
     return projects, search_query
+
+
+def getPaginationLink(request, query_set):
+    search_query = request.GET.get('search_query')
+
+    pagination_link = ''
+
+    if search_query:
+        pagination_link = '?search_query=' + search_query
+
+    if search_query and query_set.has_other_pages():
+        pagination_link += '&page='
+    elif query_set.has_other_pages():
+        pagination_link = '?page='
+    else:
+        pagination_link = ''
+
+    return pagination_link

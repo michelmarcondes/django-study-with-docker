@@ -4,14 +4,17 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Project
 from .forms import ProjectForm
-from .utils import searchProjects, paginateProjects
+from .utils import searchProjects, paginateProjects, getPaginationLink
 
 # Create your views here.
 def projects(request):
     projects, search_query = searchProjects(request)
     projects, custom_range = paginateProjects(request, projects, results=3)
+
+    pagination_link = getPaginationLink(request, projects)
+
     
-    context = {'projects': projects, 'search_query': search_query, 'custom_range': custom_range}
+    context = {'projects': projects, 'search_query': search_query, 'custom_range': custom_range, 'pagination_link': pagination_link}
 
     return render(request, 'projects/projects.html', context)
 

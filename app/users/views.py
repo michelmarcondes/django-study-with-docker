@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from .models import Profile
 from .forms import CustomUserCreationForm, ProfileForm, SkillForm
-from .utils import searchProfiles, paginateProfiles
+from .utils import searchProfiles, paginateProfiles, getPaginationLink
 
 # Create your views here.
 
@@ -65,7 +65,9 @@ def profiles(request):
     profiles, search_query = searchProfiles(request)
     profiles, custom_range = paginateProfiles(request, profiles, results=3)
 
-    context = {'profiles': profiles, 'search_query': search_query, 'custom_range': custom_range}
+    pagination_link = getPaginationLink(request, profiles)
+
+    context = {'profiles': profiles, 'search_query': search_query, 'custom_range': custom_range, 'pagination_link': pagination_link}
     return render(request, 'users/profiles.html', context)
 
 def userProfile(request, pk):

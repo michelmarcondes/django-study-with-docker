@@ -59,6 +59,6 @@
       </div>
     </section>
 
-    {% include 'pagination.html' with queryset=profiles %}
+    {% include 'pagination.html' with queryset=profiles pagination_link=pagination_link %}
   </main>
 {% endblock content %}

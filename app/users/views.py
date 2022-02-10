@@ -16,7 +16,7 @@ def loginPage(request):
         return redirect('profiles')
 
     if request.method == 'POST':
-        username = request.POST['username']
+        username = request.POST['username'].lower()
         password = request.POST['password']
 
         try:
@@ -27,8 +27,11 @@ def loginPage(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
+            #login authenticated user and create his session
             login(request, user)
-            return redirect('profiles')
+
+            destinationUrl = request.GET['next'] if 'next' in request.GET else 'account'
+            return redirect(destinationUrl)
         else:
             messages.error(request, 'Username or Password is incorrect')
 
@@ -63,7 +66,7 @@ def registerUser(request):
 
 def profiles(request):
     profiles, search_query = searchProfiles(request)
-    profiles, custom_range = paginateProfiles(request, profiles, results=3)
+    profiles, custom_range = paginateProfiles(request, profiles, results=6)
 
     pagination_link = getPaginationLink(request, profiles)
 

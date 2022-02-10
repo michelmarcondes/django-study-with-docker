@@ -1,15 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 from .models import Project
-from .forms import ProjectForm
+from .forms import ProjectForm, ReviewForm
 from .utils import searchProjects, paginateProjects, getPaginationLink
 
 # Create your views here.
 def projects(request):
     projects, search_query = searchProjects(request)
-    projects, custom_range = paginateProjects(request, projects, results=3)
+    projects, custom_range = paginateProjects(request, projects, results=6)
 
     pagination_link = getPaginationLink(request, projects)
 
@@ -20,8 +21,22 @@ def projects(request):
 
 def project(request, pk):
     projectObj = Project.objects.get(id=pk)
+    form = ReviewForm()
+    context = {'project': projectObj, 'form': form}
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        review = form.save(commit=False)
+        review.project = projectObj
+        review.owner = request.user.profile
+        review.save()
+
+        projectObj.getVoteCount
+
+        messages.success(request, 'Your review was successfully submitted!')
+
     
-    return render(request, 'projects/single-project.html', {'project': projectObj})
+    return render(request, 'projects/single-project.html', context )
 
 @login_required(login_url='login')
 def createProject(request):
